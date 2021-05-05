@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 import time
 
 from kivy.app import App
-from kivy.ulx.widget import widget
-from kivy.ulx.button import button
+from kivy.uix.widget import Widget
+from kivy.uix.button import Button
 from kivy.graphics import Color, Ellipse, Line
 from kivy.config import Config
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
@@ -46,23 +46,23 @@ def init():
 
 class Car(Widget):
     
-    angle = NumericProperty(0)
-    rotation = NumericProperty(0)
-    velocity_x = NumericProperty(0)
-    velocity_y = NumericProperty(0)
+    angle = NumericProperty(0.)
+    rotation = NumericProperty(0.)
+    velocity_x = NumericProperty(0.)
+    velocity_y = NumericProperty(0.)
     velocity = ReferenceListProperty(velocity_x, velocity_y)
-    sensor1_x = NumericProperty(0)
-    sensor1_y = NumericProperty(0)
+    sensor1_x = NumericProperty(0.)
+    sensor1_y = NumericProperty(0.)
     sensor1 = ReferenceListProperty(sensor1_x, sensor1_y)
-    sensor2_x = NumericProperty(0)
-    sensor2_y = ReferenceListProperty(0)
+    sensor2_x = NumericProperty(0.)
+    sensor2_y = ReferenceListProperty(0.)
     sensor2 = ReferenceListProperty(sensor2_x, sensor2_y)
-    sensor3_x = NumericProperty(0)
-    sensor3_y = ReferenceListProperty(0)
+    sensor3_x = NumericProperty(0.)
+    sensor3_y = ReferenceListProperty(0.)
     sensor3 = ReferenceListProperty(sensor3_x, sensor3_y)
-    signal1 = NumericProperty(0)
-    signal2 = NumericProperty(0)
-    signal3 = NumericProperty(0)
+    signal1 = NumericProperty(0.)
+    signal2 = NumericProperty(0.)
+    signal3 = NumericProperty(0.)
     
     def move(self, rotation):
         self.pos = Vector(*self.velocity) + self.pos
@@ -135,12 +135,9 @@ class Game(Widget):
             last_reward = -1
         else:
             self.car.velocity = Vector(6, 0).rotate(self.car.angle)
+            last_reward = -0.2
             if distance < last_distance:
                 last_reward = 0.1
-            elif distance == last_distance:
-                last_reward = 0
-            else distance > last_distance:
-                last_reward = -0.1
                 
         if self.car.x < 10:
             self.car.x = 10
@@ -225,7 +222,7 @@ class CarApp(App):
         brain.load()
 
 if __name__ == '__main__':
-    CarApp.run()
+    CarApp().run()
 
         
         
