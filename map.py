@@ -3,7 +3,7 @@
 """
 Created on Mon Mar 29 11:18:58 2021
 
-@author: se0031
+@author: Shafi Sahal
 """
 
 import numpy as np
@@ -46,23 +46,23 @@ def init():
 
 class Car(Widget):
     
-    angle = NumericProperty(0.)
-    rotation = NumericProperty(0.)
-    velocity_x = NumericProperty(0.)
-    velocity_y = NumericProperty(0.)
+    angle = NumericProperty(0)
+    rotation = NumericProperty(0)
+    velocity_x = NumericProperty(0)
+    velocity_y = NumericProperty(0)
     velocity = ReferenceListProperty(velocity_x, velocity_y)
-    sensor1_x = NumericProperty(0.)
-    sensor1_y = NumericProperty(0.)
+    sensor1_x = NumericProperty(0)
+    sensor1_y = NumericProperty(0)
     sensor1 = ReferenceListProperty(sensor1_x, sensor1_y)
-    sensor2_x = NumericProperty(0.)
-    sensor2_y = ReferenceListProperty(0.)
+    sensor2_x = NumericProperty(0)
+    sensor2_y = ReferenceListProperty(0)
     sensor2 = ReferenceListProperty(sensor2_x, sensor2_y)
-    sensor3_x = NumericProperty(0.)
-    sensor3_y = ReferenceListProperty(0.)
+    sensor3_x = NumericProperty(0)
+    sensor3_y = ReferenceListProperty(0)
     sensor3 = ReferenceListProperty(sensor3_x, sensor3_y)
-    signal1 = NumericProperty(0.)
-    signal2 = NumericProperty(0.)
-    signal3 = NumericProperty(0.)
+    signal1 = NumericProperty(0)
+    signal2 = NumericProperty(0)
+    signal3 = NumericProperty(0)
     
     def move(self, rotation):
         self.pos = Vector(*self.velocity) + self.pos
