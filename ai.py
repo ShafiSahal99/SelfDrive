@@ -78,6 +78,12 @@ class Dqn():
     
     def score(self):
         return sum(self.reward_window)/(len(self.reward_window) + 1.)
+    
+    def save(self):
+        torch.save({'state_dict': self.model.state_dict(),
+                    'optimizer': slef.oprimizer.state_dict
+                    }, 'last_brain.pth')
+        
         
         
 
