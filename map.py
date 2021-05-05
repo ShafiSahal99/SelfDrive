@@ -20,6 +20,8 @@ from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProper
 from kivy.vector import Vector
 from kivy.clock import Clock
 
+from ai import Dqn
+
 Config.set ('input', 'mouse', 'mouse,multi_touch_on_demand')
 
 last_x = 0
@@ -27,6 +29,7 @@ last_y = 0
 n_points = 0
 length = 0
 
+brain = Dqn(5, 3, 0.9)
 action2rotation = [0, 20, -20]
 last_reward = 0
 scores = []
@@ -37,7 +40,7 @@ def init():
     global goal_x
     global goal_y
     global first_update
-    sand = np.zeros(longueur, largeur)
+    sand = np.zeros((longueur, largeur))
     goal_x = 20
     goal_y = largeur - 20
     first_update = False
@@ -55,10 +58,10 @@ class Car(Widget):
     sensor1_y = NumericProperty(0)
     sensor1 = ReferenceListProperty(sensor1_x, sensor1_y)
     sensor2_x = NumericProperty(0)
-    sensor2_y = ReferenceListProperty(0)
+    sensor2_y = NumericProperty(0)
     sensor2 = ReferenceListProperty(sensor2_x, sensor2_y)
     sensor3_x = NumericProperty(0)
-    sensor3_y = ReferenceListProperty(0)
+    sensor3_y = NumericProperty(0)
     sensor3 = ReferenceListProperty(sensor3_x, sensor3_y)
     signal1 = NumericProperty(0)
     signal2 = NumericProperty(0)
@@ -195,7 +198,7 @@ class CarApp(App):
         Clock.schedule_interval(parent.update, 1.0/60.0)
         self.painter = MyPaintWidget()
         clearbtn = Button(text = 'Clear')
-        saverbtn = Button(text = 'Save', pos = (parent.width, 0))
+        savebtn = Button(text = 'Save', pos = (parent.width, 0))
         loadbtn = Button(text = 'Load', pos = (2 * parent.width, 0))
         clearbtn.bind(on_release = self.clear_canvas)
         savebtn.bind(on_release = self.save)

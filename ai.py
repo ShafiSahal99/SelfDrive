@@ -9,7 +9,7 @@ import torch.autograd as autograd
 from torch.autograd import Variable
 
 class NetWork(nn.Module):
-    def __init__(self, input_size. nb_action):
+    def __init__(self, input_size, nb_action):
         super(Network, self).__init__()
         self.input_size = input_size
         self.nb_action = nb_action
@@ -84,6 +84,14 @@ class Dqn():
                     'optimizer': slef.oprimizer.state_dict
                     }, 'last_brain.pth')
         
-        
+    def load(self):
+        if os.path.isfile('last_brain.pth'):
+            print('=> loading checkpoint...')
+            checkpoint = torch.load('last_brain.pth')
+            self.model.load_state_dict(checkpoint['state_dict'])
+            self.oprimizer.load_state_dict(checkpoint['optimizer'])
+            print('Done !')
+        else:
+            print('no checkpoint found...')
         
 
