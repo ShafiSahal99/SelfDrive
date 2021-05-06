@@ -8,7 +8,7 @@ import torch.optim as optim
 import torch.autograd as autograd
 from torch.autograd import Variable
 
-class NetWork(nn.Module):
+class Network(nn.Module):
     def __init__(self, input_size, nb_action):
         super(Network, self).__init__()
         self.input_size = input_size
@@ -19,7 +19,7 @@ class NetWork(nn.Module):
     def forward(self, state):
         x = F.relu(self.fc1(state))
         q_values = self.fc2(x)
-        return q_vallues
+        return q_values
     
 class ReplayMemory(object):
     
@@ -33,17 +33,18 @@ class ReplayMemory(object):
             del self.memory[0]
             
     def sample(self, batch_size):
-        samples = zip(*random.samle(self.memory, batch_size))
+        samples = zip(*random.sample(self.memory, batch_size))
         return map(lambda x: Variable(torch.cat(x, 0)), samples)
     
 class Dqn():
     
-    def __init__(self, input_size, batch_size, gamma):
+    def __init__(self, input_size, nb_action, gamma):
         self.gamma = gamma
         self.reward_window = []
-        self.model = Network(input_size, batch_size)
+        self.model = Network(input_size, nb_action)
         self.memory = ReplayMemory(100000)
         self.optimizer = optim.Adam(self.model.parameters(), lr = 0.001)
+        self.last_state = torch.Tensor(input_size).unsqueeze(0)
         self.last_action = 0
         self.last_reward = 0
         
@@ -63,10 +64,10 @@ class Dqn():
         
     def update(self, reward, new_signal):
         new_state = torch.Tensor(new_signal).float().unsqueeze(0)
-        self.memoy.push(self.last_state, new_state, torch.LongTensor([int(self.last_action)], torch.Tensor([self.last_reward]))
-        action = self.action(new_state)
+        self.memory.push((self.last_state, new_state, torch.LongTensor([int(self.last_action)]), torch.Tensor([self.last_reward])))
+        action = self.select_action(new_state)
         if len(self.memory.memory) > 100:
-            batch_state, batch_next_state, batch_reward, batch_action = self.memory.sample(100)
+            batch_state, batch_next_state, batch_action, batch_reward  = self.memory.sample(100)
             self.learn(batch_state, batch_next_state, batch_reward, batch_action)
         self.last_action = action
         self.last_state = new_state
@@ -81,7 +82,7 @@ class Dqn():
     
     def save(self):
         torch.save({'state_dict': self.model.state_dict(),
-                    'optimizer': slef.oprimizer.state_dict
+                    'optimizer': self.optimizer.state_dict()
                     }, 'last_brain.pth')
         
     def load(self):
@@ -89,7 +90,7 @@ class Dqn():
             print('=> loading checkpoint...')
             checkpoint = torch.load('last_brain.pth')
             self.model.load_state_dict(checkpoint['state_dict'])
-            self.oprimizer.load_state_dict(checkpoint['optimizer'])
+            self.optimizer.load_state_dict(checkpoint['optimizer'])
             print('Done !')
         else:
             print('no checkpoint found...')

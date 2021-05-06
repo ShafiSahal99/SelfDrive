@@ -45,7 +45,7 @@ def init():
     goal_y = largeur - 20
     first_update = False
     
-    last_distance = 0
+last_distance = 0
 
 class Car(Widget):
     
@@ -146,7 +146,7 @@ class Game(Widget):
             self.car.x = 10
             last_reward = -1
         if self.car.x > self.width - 10:
-            self.car.x = sellf.width - 10
+            self.car.x = self.width - 10
             last_reward = -1
         if self.car.y < 10:
             self.car.y = 10
@@ -159,7 +159,8 @@ class Game(Widget):
             goal_x = self.width-goal_x
             goal_y = self.height-goal_y
             
-        last_distance = diatance
+        last_distance = distance
+        print('reward: ' + str(last_reward))
         
 class MyPaintWidget(Widget):
     
@@ -176,13 +177,13 @@ class MyPaintWidget(Widget):
             sand[int(touch.x), int(touch.y)] = 1
             
     def on_touch_move(self, touch):
-        global lenght, n_points, last_x, last_y
+        global length, n_points, last_x, last_y
         if touch.button == 'left':
             touch.ud['line'].points += [touch.x, touch.y]
             x = int(touch.x)
             y = int(touch.y)
-            lenght = np.sqrt(max((x - last_x)**2 + (y - last_y)**2, 2))
-            n_points += 1
+            length += np.sqrt(max((x - last_x)**2 + (y - last_y)**2, 2))
+            n_points += 1.
             density = n_points/(length)
             touch.ud['line'].width = int(20 * density + 1)
             sand[int(touch.x) - 10: int(touch.x) + 10, int(touch.y) - 10: int(touch.y) + 10] = 1
@@ -212,7 +213,7 @@ class CarApp(App):
     def clear_canvas(self, obj):
         global sand
         self.painter.canvas.clear()
-        sand = np.zeros(longueur, largeur)
+        sand = np.zeros((longueur, largeur))
         
     def save(self, obj):
         print('Saving brain...')
